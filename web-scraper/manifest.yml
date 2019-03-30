@@ -1,0 +1,7 @@
+---
+applications:
+- name: web-scraper
+  memory: 640M
+  instances: 1
+  buildpack: java_buildpack
+  path: target/web-scraper-0.0.1-SNAPSHOT.jar
