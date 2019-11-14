@@ -1,15 +1,21 @@
-package com.hz.webscraper.domain;
+package com.ttj.webscraper.domain;
 
 /**
  * @author ashok
  */
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value="Article", description="News article")
 public class Article implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+	@ApiModelProperty("Title for article")
 	private String title;
+	@ApiModelProperty("Article description")
 	private String description;
+	@ApiModelProperty("Author name")
 	private String authorName;
 	
 	public Article() {

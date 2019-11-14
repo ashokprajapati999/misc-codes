@@ -1,4 +1,4 @@
-package com.hz.webscraper.util;
+package com.ttj.webscraper.util;
 
 /**
  * @author ashok
@@ -41,9 +41,9 @@ public class WebScraperHelper {
 	 * which are coming under the tags expression supplied as links search tags and then fetches all the meta details for those pages
 	 * @return : returns a list of all articles with the details fetched using the links search tag supplied in constructor.
 	 */
-	public List<Map<String, String>> fetchAllLinkMetaDetailsFromPage(){
+	public CompletableFuture<List<Map<String, String>>> fetchAllLinkMetaDetailsFromPage(){
 		List<Map<String, String>> metaDetailsList = new ArrayList<>();
-		CompletableFuture<Object> future = CompletableFuture.supplyAsync(()->{
+		return CompletableFuture.supplyAsync(()->{
 			try {
 				Set<String> links = getAllLinksFromPage();
 				return links;
@@ -68,13 +68,7 @@ public class WebScraperHelper {
 				}
 			});
 			return metaDetailsList;
-		});
-		try {
-			future.get();
-		} catch (InterruptedException | ExecutionException e) {
-			LOGGER.error("Error in extracting results after task completion.", e);
-		}
-		return metaDetailsList;
+		}).toCompletableFuture();
 	}
 	/**
 	 * Extracts article details from meta tag using the detailsSearchTag supplied in constructor.

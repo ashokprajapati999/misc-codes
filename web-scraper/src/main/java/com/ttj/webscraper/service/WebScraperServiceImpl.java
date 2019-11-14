@@ -1,4 +1,4 @@
-package com.hz.webscraper.service;
+package com.ttj.webscraper.service;
 
 /**
  * @author ashok
@@ -8,18 +8,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.hz.webscraper.domain.Article;
-import com.hz.webscraper.util.WebScraperHelper;
+import com.ttj.webscraper.domain.Article;
+import com.ttj.webscraper.util.WebScraperHelper;
 
 @Service
 public class WebScraperServiceImpl implements WebScraperService{
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 	private List<Article> articles = new ArrayList<>();
 	
@@ -43,14 +48,37 @@ public class WebScraperServiceImpl implements WebScraperService{
 	@PostConstruct
 	@Override
 	public void loadContents() throws IOException {
+		LOGGER.info("loadContents()...start");
+		articles.clear();
 		List<String> articleDetailsSearchTags = Arrays.asList(authorTagName, titleTagName, descTagName);
 		WebScraperHelper scraperHelper = new WebScraperHelper(newspaperUrl, parseTimeoutMillis, articleDetailsSearchTags, articleLinksSearchTags);
 
-		List<Map<String, String>> articleDetails = scraperHelper.fetchAllLinkMetaDetailsFromPage();
+		LOGGER.info("Extracting article details...start");
 		
-		articleDetails.forEach(map->{
-			articles.add(new Article(map.get(titleTagName), map.get(descTagName), map.get(authorTagName)));
-		});
+//				scraperHelper.fetchAllLinkMetaDetailsFromPage()
+//				.thenAccept(metaMap->{
+//					metaMap.stream()
+//					.filter(map->map.get(authorTagName)!=null && map.get(authorTagName).length()>0)
+//					.forEach(map->{
+//						articles.add(new Article(map.get(titleTagName), map.get(descTagName), map.get(authorTagName)));
+//					});
+//					LOGGER.info("Extracting article details...completed");
+//				});
+				
+				try {
+					scraperHelper.fetchAllLinkMetaDetailsFromPage()
+					.get()
+					.forEach(map->{
+						articles.add(new Article(map.get(titleTagName), map.get(descTagName), map.get(authorTagName)));
+					});
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		LOGGER.info("loadContents()...completed");
 	}
 	
 	@Override

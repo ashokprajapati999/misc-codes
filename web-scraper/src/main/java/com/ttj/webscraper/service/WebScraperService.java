@@ -1,13 +1,10 @@
-package com.hz.webscraper.service;
-
-/**
- * @author ashok
- */
-import com.hz.webscraper.domain.Article;
+package com.ttj.webscraper.service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+
+import com.ttj.webscraper.domain.Article;
 
 public interface WebScraperService {
 	

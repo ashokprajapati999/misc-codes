@@ -1,4 +1,4 @@
-package com.hz.webscraper;
+package com.ttj.webscraper;
 
 /**
  * @author ashok
@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages= {"com.hz.webscraper"})
+@ComponentScan(basePackages= {"com.ttj.webscraper"})
 public class WebScraperApplication {
 
 	public static void main(String[] args) {
