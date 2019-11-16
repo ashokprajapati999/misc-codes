@@ -14,5 +14,4 @@ public class WebScraperApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WebScraperApplication.class, args);
 	}
-
 }

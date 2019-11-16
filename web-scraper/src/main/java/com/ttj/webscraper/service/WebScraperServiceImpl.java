@@ -54,30 +54,15 @@ public class WebScraperServiceImpl implements WebScraperService{
 		WebScraperHelper scraperHelper = new WebScraperHelper(newspaperUrl, parseTimeoutMillis, articleDetailsSearchTags, articleLinksSearchTags);
 
 		LOGGER.info("Extracting article details...start");
+						
+		scraperHelper.fetchAllLinkMetaDetailsFromPage()
+		.thenAccept(list->{
+			list.stream().filter(map->map.get(authorTagName)!=null && map.get(authorTagName).length()>0)
+			.forEach(map->{
+				articles.add(new Article(map.get(titleTagName), map.get(descTagName), map.get(authorTagName)));
+			});
+		});
 		
-//				scraperHelper.fetchAllLinkMetaDetailsFromPage()
-//				.thenAccept(metaMap->{
-//					metaMap.stream()
-//					.filter(map->map.get(authorTagName)!=null && map.get(authorTagName).length()>0)
-//					.forEach(map->{
-//						articles.add(new Article(map.get(titleTagName), map.get(descTagName), map.get(authorTagName)));
-//					});
-//					LOGGER.info("Extracting article details...completed");
-//				});
-				
-				try {
-					scraperHelper.fetchAllLinkMetaDetailsFromPage()
-					.get()
-					.forEach(map->{
-						articles.add(new Article(map.get(titleTagName), map.get(descTagName), map.get(authorTagName)));
-					});
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 		LOGGER.info("loadContents()...completed");
 	}
 	
