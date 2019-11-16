@@ -1,4 +1,4 @@
-package com.hz.webscraper;
+package com.ttj.webscraper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
